@@ -43,8 +43,8 @@ echo "Training G2P ..."
 # (See http://www.aclweb.org/anthology/P18-4003.pdf for more details)
 # Must have uroman (available at https://github.com/isi-nlp/uroman)
 echo "Romanizing oov characters"
-#python local/transliterate_oov_graphemes.py ${test_words} ${selected_words} ${odir}/${words_name}.transform
-mv ${test_words} ${odir}/${words_name}.transform
+python local/transliterate_oov_graphemes.py ${test_words} ${selected_words} ${odir}/${words_name}.transform
+#mv ${test_words} ${odir}/${words_name}.transform
 
 echo "Applying G2P ..."
 ./local/g2p_selection/apply_g2p.sh --nbest 1 \

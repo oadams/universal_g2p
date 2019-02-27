@@ -34,31 +34,33 @@ def main():
     with codecs.open(args.train_words, 'r', encoding='utf-8') as f:
         for l in f:
             for grapheme in l.strip():
+                print(grapheme)
                 train_graphemes.add(grapheme) 
+    print(train_graphemes)
+    import sys; sys.exit()
 
     print("Test graphemes")
     transformed = []
     with codecs.open(args.test_words, 'r', encoding='utf-8') as f:
         words = f.readlines()
-    
+
     print("Transform graphemes")
-    for idx_l, l in enumerate(words, 1):
+    for idx_l, word in enumerate(words, 1):
         print('Word ', idx_l, ' of ', len(words))
-        if set(w.strip()).isdisjoint(train_graphemes):
+        if set(word.strip()).isdisjoint(train_graphemes):
+            print(word.strip())
+            print(train_graphemes)
             new_word = u""
-            for grapheme in l.strip():
-                if grapheme not in train_graphemes:
-                    ps = subprocess.Popen(['./uroman/bin/uroman.pl'], stdout=subprocess.PIPE, stdin=subprocess.PIPE, stderr=subprocess.PIPE)
-                    ps.stdin.write(grapheme.encode('utf-8'))
-                    romanized, _ = ps.communicate()
-                    ps.stdin.close()
-                    ps.stdout.close()
-                    ps.stderr.close()
-                    new_word += romanized.strip() 
-                else:
-                    new_word += grapheme
+            ps = subprocess.Popen(['./uroman/bin/uroman.pl'], stdout=subprocess.PIPE, stdin=subprocess.PIPE, stderr=subprocess.PIPE)
+            ps.stdin.write(word.encode('utf-8'))
+            romanized, _ = ps.communicate()
+            ps.stdin.close()
+            ps.stdout.close()
+            ps.stderr.close()
+            new_word = romanized.strip() 
+            print(word, new_word)
             transformed.append(new_word)
-    
+
     with codecs.open(args.transformed_words, 'w', encoding='utf-8') as f:
         for w in transformed:
             print(w, file=f)
