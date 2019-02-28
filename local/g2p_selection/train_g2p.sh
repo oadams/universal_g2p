@@ -5,6 +5,8 @@ g2p_iters=6
 stage=0
 known_words=50
 nj=10
+seq1_max=2
+seq2_max=2
 
 . ./utils/parse_options.sh
 . ./path.sh
@@ -41,6 +43,7 @@ echo "------------------------"
 
 phonetisaurus-align \
   --seq1_del=false --seq2_del=false \
+  --seq1_max=${seq1_max} --seq2_max=${seq2_max} \
   --input=$lexicon  \
   --ofile=$output/g2p.corpus || true 
 

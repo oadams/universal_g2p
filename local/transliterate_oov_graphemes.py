@@ -15,7 +15,7 @@ import pdb
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('test_words',
-        help='words for G2P is used to derive pronunciations',
+        help='words for which G2P is used to derive pronunciations',
         type=str
     )
     parser.add_argument('train_words',
@@ -34,33 +34,30 @@ def main():
     with codecs.open(args.train_words, 'r', encoding='utf-8') as f:
         for l in f:
             for grapheme in l.strip():
-                print(grapheme)
                 train_graphemes.add(grapheme) 
     print(train_graphemes)
-    import sys; sys.exit()
+
 
     print("Test graphemes")
     transformed = []
     with codecs.open(args.test_words, 'r', encoding='utf-8') as f:
         words = f.readlines()
-
+   
     print("Transform graphemes")
-    for idx_l, word in enumerate(words, 1):
+    for idx_l, l in enumerate(words, 1):
         print('Word ', idx_l, ' of ', len(words))
-        if set(word.strip()).isdisjoint(train_graphemes):
-            print(word.strip())
-            print(train_graphemes)
-            new_word = u""
-            ps = subprocess.Popen(['./uroman/bin/uroman.pl'], stdout=subprocess.PIPE, stdin=subprocess.PIPE, stderr=subprocess.PIPE)
-            ps.stdin.write(word.encode('utf-8'))
-            romanized, _ = ps.communicate()
-            ps.stdin.close()
-            ps.stdout.close()
-            ps.stderr.close()
-            new_word = romanized.strip() 
-            print(word, new_word)
-            transformed.append(new_word)
-
+        new_word = u""
+        print(l)
+        for grapheme in l.strip():
+            if grapheme not in train_graphemes:
+                print(grapheme)
+                ps = subprocess.Popen(['./uroman/bin/uroman.pl'], stdout=subprocess.PIPE, stdin=subprocess.PIPE, stderr=subprocess.PIPE)
+                romanized, _ = ps.communicate(input=grapheme.encode('utf-8'))
+                new_word += romanized.strip() 
+            else:
+                new_word += grapheme
+        transformed.append(new_word)
+    
     with codecs.open(args.transformed_words, 'w', encoding='utf-8') as f:
         for w in transformed:
             print(w, file=f)
