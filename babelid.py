@@ -1,0 +1,28 @@
+id2lang = {
+    102:"cantonese",
+    103:"assamese",
+    104:"bengali",
+    105:"pashto",
+    106:"turkish",
+    107:"tagalog",
+    108:"vietnamese",
+    202:"haitian",
+    203:"swahili",
+    204:"lao",
+    205:"tamil",
+    206:"kurmanji",
+    207:"zulu",
+    208:"tokpisin",
+    302:"cebuano",
+    303:"kazakh",
+    304:"telugu",
+    305:"lithuanian",
+    306:"guarani",
+    307:"igbo",
+    308:"amharic",
+    402:"mongolian",
+    403:"javanese",
+    404:"dholuo",
+    }
+
+lang2id = {lang:id for id, lang in id2lang.items()}
